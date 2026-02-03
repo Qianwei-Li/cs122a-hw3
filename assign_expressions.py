@@ -211,7 +211,7 @@ class Expressions:
     _not_max_items = Projection(_more_expensive, ["item_id"])
     _max_items = _all_items - _not_max_items
 
-    _max_items_renamed = Rename(_max_items, {"item_id": "mid"}
+    _max_items_renamed = Rename(_max_items, {"item_id": "mid"})
 
     _max_item_names = ThetaJoin(
         _max_items_renamed,
