@@ -153,32 +153,31 @@ class Expressions:
 
     _emp5 = Selection(Employee, Equals("employee_id", 5))
 
+    _emp5_renamed = Rename(_emp5, {
+        "employee_id": "eid5",
+        "branch_number": "branch5",
+        "restaurant_id": "rest5",
+    })
+
     Employee_2 = Rename(Employee, {
-        "employee_id": "eid2",
-        "branch_number": "branch2",
-        "restaurant_id": "rest2",
-        "name": "name2"
+        "employee_id": "eid",
+        "branch_number": "branch",
+        "restaurant_id": "rest",
+        "name": "name"
     })
 
     _same_branch = ThetaJoin(
-        Employee,
         Employee_2,
+        _emp5_renamed,
         And(
-            Equals("branch_number", "branch2"),
-            Equals("restaurant_id", "rest2")
+            Equals("branch", "branch5"),
+            Equals("rest", "rest5")
         )
     )
-    _emp5_renamed = Rename(_emp5, {"employee_id": "eid5"})
-    
-    _same_as_5 = ThetaJoin(
-        _same_branch,
-        _emp5_renamed,
-        Equals("eid2", "eid5")
-    )
 
-    _not_5 = Selection(_same_as_5, Not(Equals("employee_id", 5)))
+    _not_5 = Selection(_same_branch, Not(Equals("eid", eid5)))
 
-    expression8 = Projection(_not_5, ["Employee.name"])
+    expression8 = Projection(_not_5, ["name"])
 
     # --------------------------------------------------
     # Question 9
