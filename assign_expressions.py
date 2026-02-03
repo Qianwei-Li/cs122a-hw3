@@ -151,17 +151,20 @@ class Expressions:
     # Question 8
     # --------------------------------------------------
 
-    _emp5_branch = Projection(
-        Selection(Employee, Equals("employee_id", 5)),
-        ["branch_number", "restaurant_id"]
+    _emp5_branch = Rename(
+        Projection(
+            Selection(Employee, Equals("employee_id", 5)),
+            ["branch_number", "restaurant_id"]
+        ),
+        {"branch_number": "b_branch_number", "restaurant_id": "b_restaurant_id"}
     )
 
     _same_branch_emps = ThetaJoin(
         Employee,
         _emp5_branch,
         And(
-            Equals("Employee.branch_number", "branch_number"),
-            Equals("Employee.restaurant_id", "restaurant_id")
+            Equals("Employee.branch_number", "b_branch_number"),
+            Equals("Employee.restaurant_id", "b_restaurant_id")
         )
     )
 
