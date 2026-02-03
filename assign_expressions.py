@@ -178,7 +178,7 @@ class Expressions:
 
     _not_5 = Selection(_same_as_5, Not(Equals("employee_id", 5)))
 
-    expression8 = Projection(_not_5, ["name"])
+    expression8 = Projection(_not_5, ["Employee.name"])
 
     # --------------------------------------------------
     # Question 9
@@ -211,7 +211,7 @@ class Expressions:
     _not_max_items = Projection(_more_expensive, ["item_id"])
     _max_items = _all_items - _not_max_items
 
-    _max_items_renamed = Rename(_max_items, {"item_id": "mid"})
+    _max_items_renamed = Rename(_max_items, {"item_id": "m_id"})
 
     _max_item_names = ThetaJoin(
         _max_items_renamed,
