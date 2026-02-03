@@ -60,10 +60,11 @@ class Expressions:
         Equals("'Order'.waiter_id", "Waiter.employee_id")
     )
 
+
     _waiter_employee = ThetaJoin(
         _order_waiter,
         Employee,
-        Equals("employee_id", "Employee.employee_id")
+        Equals("Waiter.employee_id", "Employee.employee_id")
     )
 
     expression4 = Projection(_waiter_employee, ["name"])
@@ -121,23 +122,28 @@ class Expressions:
     # Question 7
     # --------------------------------------------------
 
-    _cancelled_orders = Selection(Order, Equals("status", "CANCELLED"))
 
-    _all_waiters = ThetaJoin(
-        Waiter,
-        Employee,
-        Equals("Waiter.employee_id", "Employee.employee_id")
+    _all_waiter_ids = Projection(Waiter, ["employee_id"])
+
+    _cancelled_waiter_ids = Projection(
+        ThetaJoin(
+            Selection(Order, Equals("status", "CANCELLED")),
+            Waiter,
+            Equals("'Order'.waiter_id", "Waiter.employee_id")
+        ),
+        ["employee_id"]
     )
 
-    _bad_waiters = ThetaJoin(
-        _cancelled_orders,
-        _all_waiters,
-        Equals("'Order'.waiter_id", "Employee.employee_id")
+    _good_waiter_ids = _all_waiter_ids - _cancelled_waiter_ids
+
+    expression7 = Projection(
+        ThetaJoin(
+            _good_waiter_ids,
+            Employee,
+            Equals("employee_id", "Employee.employee_id")
+        ),
+        ["name"]
     )
-
-    _good_waiters = _all_waiters - _bad_waiters
-
-    expression7 = Projection(_good_waiters, ["name"])
 
     # --------------------------------------------------
     # Question 8
@@ -158,7 +164,7 @@ class Expressions:
     _same_as_5 = ThetaJoin(
         _same_branch,
         _emp5,
-        Equals("Employee_2.employee_id", "employee_id")
+        Equals("Employee_2.employee_id", "Employee.employee_id")
     )
 
     _not_5 = Selection(_same_as_5, Not(Equals("Employee.employee_id", 5)))
@@ -171,14 +177,8 @@ class Expressions:
 
     _all_main_dishes = Projection(Main_Dish, ["item_id"])
 
-    _main_branch_items = ThetaJoin(
-        Menu_Item_Branch,
-        Main_Dish,
-        Equals("Menu_Item_Branch.item_id", "Main_Dish.item_id")
-    )
-
     _branch_item_pairs = Projection(
-        _main_branch_items,
+        Menu_Item_Branch,
         ["branch_number", "restaurant_id", "item_id"]
     )
 
@@ -196,7 +196,7 @@ class Expressions:
     _more_expensive = ThetaJoin(
         Menu_Item,
         Menu_Item_2,
-        GreaterThan("price2", "price")
+        GreaterThan("Menu_Item_.price2", "Menu_Item.price")
     )
 
     _not_max_items = Projection(_more_expensive, ["item_id"])
