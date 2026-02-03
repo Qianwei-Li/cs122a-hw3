@@ -162,8 +162,8 @@ class Expressions:
     Employee_2 = Rename(Employee, {
         "employee_id": "eid",
         "branch_number": "branch",
-        "restaurant_id": "rest",
-        "name": "name"
+        "restaurant_id": "rest"
+        
     })
 
     _same_branch = ThetaJoin(
