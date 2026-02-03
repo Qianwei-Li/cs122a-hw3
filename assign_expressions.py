@@ -140,9 +140,9 @@ class Expressions:
 
     expression7 = Projection(
         ThetaJoin(
-            _good_waiter_ids,
+            _good_waiter_ids_renamed,
             Employee,
-            Equals("employee_id", "Employee.employee_id")
+            Equals("eid", "Employee.employee_id")
         ),
         ["name"]
     )
@@ -168,11 +168,12 @@ class Expressions:
             Equals("restaurant_id", "rest2")
         )
     )
-
+    _emp5_renamed = Rename(_emp5, {"employee_id": "eid5"})
+    
     _same_as_5 = ThetaJoin(
         _same_branch,
-        _emp5,
-        Equals("eid2", "employee_id")
+        _emp5_renamed,
+        Equals("eid2", "eid5")
     )
 
     _not_5 = Selection(_same_as_5, Not(Equals("employee_id", 5)))
@@ -210,10 +211,12 @@ class Expressions:
     _not_max_items = Projection(_more_expensive, ["item_id"])
     _max_items = _all_items - _not_max_items
 
+    _max_items_renamed = Rename(_max_items, {"item_id": "mid"}
+
     _max_item_names = ThetaJoin(
-        _max_items,
+        _max_items_renamed,
         Menu_Item,
-        Equals("item_id", "item_id")
+        Equals("m_id", "item_id")
     )
 
     expression10 = Projection(_max_item_names, ["name"])
