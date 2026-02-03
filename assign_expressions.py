@@ -151,31 +151,24 @@ class Expressions:
     # Question 8
     # --------------------------------------------------
 
-    _emp5 = Selection(Employee, Equals("employee_id", 5))
+   _emp5_branch = Projection(
+        Selection(Employee, Equals("employee_id", 5)),
+        ["branch_number", "restaurant_id"]
+    )
 
-    _emp5_renamed = Rename(_emp5, {
-        "employee_id": "eid5",
-        "branch_number": "branch5",
-        "restaurant_id": "rest5",
-    })
-
-    Employee_2 = Rename(Employee, {
-        "employee_id": "eid",
-        "branch_number": "branch",
-        "restaurant_id": "rest"
-        
-    })
-
-    _same_branch = ThetaJoin(
-        Employee_2,
-        _emp5_renamed,
+    _same_branch_emps = ThetaJoin(
+        Employee,
+        _emp5_branch,
         And(
-            Equals("branch", "branch5"),
-            Equals("rest", "rest5")
+            Equals("Employee.branch_number", "branch_number"),
+            Equals("Employee.restaurant_id", "restaurant_id")
         )
     )
 
-    _not_5 = Selection(_same_branch, Not(Equals("eid", "eid5")))
+    _not_5 = Selection(
+        _same_branch_emps,
+        Not(Equals("employee_id", 5))
+    )
 
     expression8 = Projection(_not_5, ["name"])
 
