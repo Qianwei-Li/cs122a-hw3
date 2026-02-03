@@ -136,6 +136,8 @@ class Expressions:
 
     _good_waiter_ids = _all_waiter_ids - _cancelled_waiter_ids
 
+    _good_waiter_ids_renamed = Rename(_good_waiter_ids, {"employee_id": "eid"})
+
     expression7 = Projection(
         ThetaJoin(
             _good_waiter_ids,
@@ -150,26 +152,32 @@ class Expressions:
     # --------------------------------------------------
 
     _emp5 = Selection(Employee, Equals("employee_id", 5))
-    Employee_2 = Rename(Employee, "Employee_2")
+
+    Employee_2 = Rename(Employee, {
+        "employee_id": "eid2",
+        "branch_number": "branch2",
+        "restaurant_id": "rest2",
+        "name": "name2"
+    })
 
     _same_branch = ThetaJoin(
         Employee,
         Employee_2,
         And(
-            Equals("Employee.branch_number", "Employee_2.branch_number"),
-            Equals("Employee.restaurant_id", "Employee_2.restaurant_id")
+            Equals("branch_number", "branch2"),
+            Equals("restaurant_id", "rest2")
         )
     )
 
     _same_as_5 = ThetaJoin(
         _same_branch,
         _emp5,
-        Equals("Employee_2.employee_id", "Employee.employee_id")
+        Equals("eid2", "employee_id")
     )
 
-    _not_5 = Selection(_same_as_5, Not(Equals("Employee.employee_id", 5)))
+    _not_5 = Selection(_same_as_5, Not(Equals("employee_id", 5)))
 
-    expression8 = Projection(_not_5, ["Employee.name"])
+    expression8 = Projection(_not_5, ["name"])
 
     # --------------------------------------------------
     # Question 9
@@ -196,7 +204,7 @@ class Expressions:
     _more_expensive = ThetaJoin(
         Menu_Item,
         Menu_Item_2,
-        GreaterThan("Menu_Item_.price2", "Menu_Item.price")
+        GreaterThan("price2", "price")
     )
 
     _not_max_items = Projection(_more_expensive, ["item_id"])
@@ -205,7 +213,7 @@ class Expressions:
     _max_item_names = ThetaJoin(
         _max_items,
         Menu_Item,
-        Equals("item_id", "Menu_Item.item_id")
+        Equals("item_id", "item_id")
     )
 
     expression10 = Projection(_max_item_names, ["name"])
