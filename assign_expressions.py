@@ -175,7 +175,7 @@ class Expressions:
         )
     )
 
-    _not_5 = Selection(_same_branch, Not(Equals("eid", eid5)))
+    _not_5 = Selection(_same_branch, Not(Equals("eid", "eid5")))
 
     expression8 = Projection(_not_5, ["name"])
 
