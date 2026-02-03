@@ -27,7 +27,7 @@ class Expressions:
     # Question 1
     # --------------------------------------------------
 
-    Q1 = Projection(
+    expression1 = Projection(
         Selection(Menu_Item, GreaterThan("price", 20.00)),
         ["name", "description"]
     )
@@ -38,7 +38,7 @@ class Expressions:
 
     _appetizers = Projection(Appetizer, ["item_id"])
     _main_dishes = Projection(Main_Dish, ["item_id"])
-    Q2 = _appetizers | _main_dishes
+    expression2 = _appetizers | _main_dishes
 
     # --------------------------------------------------
     # Question 3
@@ -46,7 +46,7 @@ class Expressions:
 
     _all_items = Projection(Menu_Item, ["item_id"])
     _included_items = Projection(Includes, ["item_id"])
-    Q3 = _all_items - _included_items
+    expression3 = _all_items - _included_items
 
     # --------------------------------------------------
     # Question 4
@@ -66,7 +66,7 @@ class Expressions:
         Equals("employee_id", "Employee.employee_id")
     )
 
-    Q4 = Projection(_waiter_employee, ["name"])
+    expression4 = Projection(_waiter_employee, ["name"])
 
     # --------------------------------------------------
     # Question 5
@@ -89,7 +89,7 @@ class Expressions:
         Equals("Menu_Item_Branch.item_id", "Menu_Item.item_id")
     )
 
-    Q5 = Projection(_boston_items, ["name", "price"])
+    expression5 = Projection(_boston_items, ["name", "price"])
 
     # --------------------------------------------------
     # Question 6
@@ -115,7 +115,7 @@ class Expressions:
         Equals("'Order'.customer_id", "Customer.customer_id")
     )
 
-    Q6 = Projection(_pho_customers, ["first_name", "last_name"])
+    expression6 = Projection(_pho_customers, ["first_name", "last_name"])
 
     # --------------------------------------------------
     # Question 7
@@ -137,7 +137,7 @@ class Expressions:
 
     _good_waiters = _all_waiters - _bad_waiters
 
-    Q7 = Projection(_good_waiters, ["name"])
+    expression7 = Projection(_good_waiters, ["name"])
 
     # --------------------------------------------------
     # Question 8
@@ -163,7 +163,7 @@ class Expressions:
 
     _not_5 = Selection(_same_as_5, Not(Equals("Employee.employee_id", 5)))
 
-    Q8 = Projection(_not_5, ["Employee.name"])
+    expression8 = Projection(_not_5, ["Employee.name"])
 
     # --------------------------------------------------
     # Question 9
@@ -182,7 +182,7 @@ class Expressions:
         ["branch_number", "restaurant_id", "item_id"]
     )
 
-    Q9 = _branch_item_pairs / _all_main_dishes
+    expression9 = _branch_item_pairs / _all_main_dishes
 
     # --------------------------------------------------
     # Question 10
@@ -208,5 +208,5 @@ class Expressions:
         Equals("item_id", "Menu_Item.item_id")
     )
 
-    Q10 = Projection(_max_item_names, ["name"])
+    expression10 = Projection(_max_item_names, ["name"])
 
